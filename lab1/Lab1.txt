@@ -1,0 +1,42 @@
+~$ cd cassandra/apache-cassandra-3.11.0/
+~$ cd bin
+~ $ ./cqlsh
+
+cqlsh>CREATE KEYSPACE students WITH REPLICATION={
+‘class’:’SimpleStrategy’,
+‘replication_factor’:1 };
+
+cqlsh> DESCRIBE KEYSPACES;
+
+cqlsh>SELECT * FROM system_schema.keyspaces;
+
+cqlsh>USE students;
+
+cqlsh:students>create table Student_Info(
+RollNo int PRIMARY KEY,
+StudName text,
+DateofJoining timestamp,
+LastExamPercent double);
+
+cqlsh:students> DESCRIBE TABLES;
+
+cqlsh:students> DESCRIBE TABLE student_info;
+
+BEGIN BATCH
+INSERT INTO
+student_info(RollNo,StudName,DateofJoining,LastExamPercent)
+VALUES (1,'Michael Storm','2012-03-29', 69.6)
+INSERT INTO student_info
+(RollNo,StudName,DateofJoining,LastExamPercent) VALUES
+(2,'Stephen Fox','2013-02-27', 72.5)
+APPLY BATCH;
+
+SELECT * FROM Student_Info;
+
+UPDATE Student_Info SET StudName = 'David Sheen' WHERE RollNo = 2;
+
+SELECT
+FROM Student_Info
+WHERE RollNo in (1,2,3);
+
+CREATE INDEX ON Student_Info(studname);
